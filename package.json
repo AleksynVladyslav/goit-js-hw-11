@@ -1,23 +1,22 @@
 {
-  {
-    "name": "goit-js-hw-11",
-    "version": "2.0.0",
-    "description": "  ",
-    "homepage": "https://github.com/AleksynVladyslav/goit-js-hw-11",
-    "scripts": {
-      "start": "parcel src/*.html",
-      "build": "parcel build src/*.html --public-url /goit-js-hw-11/"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/AleksynVladyslav/goit-js-hw-11.git"
-    },
-    "keywords": [],
-    "author": " ",
-    "license": "ISC",
-    "bugs": {
-      "url": "https://github.com/AleksynVladyslav/goit-js-hw-11"
-    },
+  "name": "goit-js-hw-11",
+  "version": "2.0.0",
+  "description": "  ",
+  "homepage": "https://github.com/AleksynVladyslav/goit-js-hw-11",
+  "scripts": {
+    "start": "parcel src/*.html",
+    "build": "parcel build src/*.html --public-url /goit-js-hw-11/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AleksynVladyslav/goit-js-hw-11.git"
+  },
+  "keywords": [],
+  "author": " ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AleksynVladyslav/goit-js-hw-11"
+  },
   "dependencies": {
     "modern-normalize": "^1.1.0"
   },
