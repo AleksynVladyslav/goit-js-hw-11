@@ -37,17 +37,22 @@ body {
 .gallery {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+
   gap: 20px;
   margin-bottom: 50px;
+  /* margin: 0 auto; */
 }
 
 /* Стили для отдельной фотокарточки */
 .photo-card {
-  max-width: 400px;
+  width: 400px;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
+}
+.gallery__link {
+  display: block;
+  text-decoration: none;
 }
 
 /* Стили для изображения внутри фотокарточки */
