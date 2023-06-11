@@ -69,7 +69,6 @@ async function onLoadMore(e) {
       return;
     }
     result.map(card => appendCardsMarkup(card)).join('');
-    console.log(result.hits);
   } catch (error) {
     console.log(error);
   }
