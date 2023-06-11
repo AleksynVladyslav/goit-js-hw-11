@@ -17,7 +17,7 @@ const apiService = new ApiService();
 submitRefs.disabled = true;
 loadMoreRef.classList.add('is-hidden');
 
-//Слушатели
+//Слушатели событий
 searchFormRef.addEventListener('submit', onSubmit);
 loadMoreRef.addEventListener('click', onLoadMore);
 searchFormRef.addEventListener('input', e => {
