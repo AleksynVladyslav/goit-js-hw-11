@@ -1,7 +1,16 @@
 body {
   padding: 50px;
+  background-color: #f0f0f0;
 }
-
+a {
+  transform: scale(1);
+  color: black;
+  transition: transform 250ms linear;
+}
+a:hover,
+a:focus {
+  transform: scale(1.02);
+}
 .search-form {
   display: flex;
   justify-content: center;
@@ -33,17 +42,13 @@ body {
   cursor: auto;
 }
 
-/* Стили для контейнера галереи */
 .gallery {
   display: flex;
   flex-wrap: wrap;
-
   gap: 20px;
   margin-bottom: 50px;
-  /* margin: 0 auto; */
 }
 
-/* Стили для отдельной фотокарточки */
 .photo-card {
   width: 400px;
   border: 1px solid #ccc;
@@ -55,7 +60,6 @@ body {
   text-decoration: none;
 }
 
-/* Стили для изображения внутри фотокарточки */
 .card-img {
   display: block;
   width: 100%;
@@ -63,7 +67,6 @@ body {
   object-fit: cover;
 }
 
-/* Стили для информации внутри фотокарточки */
 .info {
   display: flex;
   justify-content: space-around;
@@ -71,7 +74,6 @@ body {
   background-color: #f0f0f0;
 }
 
-/* Стили для элементов информации */
 .info-item {
   margin-bottom: 10px;
 }
@@ -80,7 +82,6 @@ body {
   font-weight: bold;
 }
 
-/* Стили для кнопки "Load more" */
 .load-more {
   display: block;
   margin: 0 auto;
