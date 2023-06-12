@@ -1,6 +1,6 @@
 import Notiflix from 'notiflix';
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { ApiService } from './api.js';
 
@@ -11,20 +11,48 @@ const refs = {
   loadMoreRef: document.querySelector('.load-more'),
 };
 const { searchFormRef, submitRefs, cardsConteinerRef, loadMoreRef } = refs;
+//Экземпляр класса из файла api.js
 const apiService = new ApiService();
-// const lightbox = new SimpleLightbox('.gallery gellery-link');
 
-submitRefs.disabled = true;
-loadMoreRef.classList.add('is-hidden');
+//Экземпляр SimpleLightbox
+const lightbox = new SimpleLightbox('.gallery .gallery__link', {
+  captionPosition: 'bottom',
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
+//Отображение кнопки Load More
+const displayLoadMore = {
+  invisibly: () => loadMoreRef.classList.add('is-hidden'),
+  visibly: () => loadMoreRef.classList.remove('is-hidden'),
+};
+//Состояние кнопки Submit
+const submitState = {
+  disabled: () => {
+    submitRefs.disabled = true;
+  },
+  enabled: () => {
+    submitRefs.disabled = false;
+  },
+};
+
+submitState.disabled();
+displayLoadMore.invisibly();
 
 //Слушатели событий
 searchFormRef.addEventListener('submit', onSubmit);
 loadMoreRef.addEventListener('click', onLoadMore);
-searchFormRef.addEventListener('input', e => {
-  if (e.currentTarget.elements.searchQuery.value) {
-    submitRefs.disabled = false;
+searchFormRef.addEventListener('input', onInputValidation);
+
+function onInputValidation(e) {
+  const searchValue = e.currentTarget.elements.searchQuery.value;
+  const newValue = searchValue.trim();
+  clearCardsConteiner();
+  displayLoadMore.invisibly();
+  if (newValue) {
+    submitState.enabled();
   }
-});
+}
 
 async function onSubmit(e) {
   e.preventDefault();
@@ -32,16 +60,13 @@ async function onSubmit(e) {
   apiService.query = e.currentTarget.elements.searchQuery.value;
   apiService.resetPage();
 
-  if (apiService.query === '') {
-    return;
-  }
-
   try {
     const result = await apiService.fetchInPixabay(apiService.query);
 
-    if (result.length === 0) {
+    if (result.hits.length === 0) {
+      clearCardsConteiner();
       apiService.query = '';
-      loadMoreRef.classList.add('is-hidden');
+      displayLoadMore.invisibly();
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
@@ -49,67 +74,92 @@ async function onSubmit(e) {
     }
 
     clearCardsConteiner();
-    loadMoreRef.classList.remove('is-hidden');
-    result.map(card => appendCardsMarkup(card)).join('');
+    result.hits.map(card => appendCardsMarkup(card)).join('');
+    if (result.totalHits < apiService.perPage) {
+      lastPageCheck();
+      return;
+    }
+    displayLoadMore.visibly();
   } catch (error) {
     console.log(error);
   }
+  lightbox.refresh();
 }
 
 async function onLoadMore(e) {
   try {
     const result = await apiService.fetchInPixabay(apiService.query);
+    result.hits.map(card => appendCardsMarkup(card)).join('');
 
-    if (result.length === 0) {
-      loadMoreRef.classList.add('is-hidden');
-      Notiflix.Notify.failure(
-        "We're sorry, but you've reached the end of search results."
-      );
+    const totalPages = Math.round(result.totalHits / apiService.perPage);
+    if (totalPages === apiService.page) {
+      lastPageCheck();
 
       return;
     }
-    result.map(card => appendCardsMarkup(card)).join('');
   } catch (error) {
     console.log(error);
   }
+  lightbox.refresh();
 }
 
+//Проверка на последнюю страницу
+function lastPageCheck() {
+  displayLoadMore.invisibly();
+  Notiflix.Notify.failure(
+    "We're sorry, but you've reached the end of search results."
+  );
+}
+
+//Добавление разметки в DOM
 function appendCardsMarkup(card) {
-  submitRefs.disabled = true;
+  submitState.disabled();
   const template = createCardTemplate(card);
   refs.cardsConteinerRef.insertAdjacentHTML('beforeend', template);
 }
 
-function createCardTemplate(card) {
+//Разметка карточек
+function createCardTemplate({
+  largeImageURL,
+  webformatURL,
+  tags,
+  likes,
+  views,
+  comments,
+  downloads,
+}) {
   return `
+  <a class='gallery__link' href="${largeImageURL}">
     <div class='photo-card'>
-   <a class='gellery-link' href="#"> <img class='card-img' src='${card.webformatURL}' alt='${card.tags}'  loading='lazy' /></a>
+    <img class='card-img' src='${webformatURL}' alt='${tags}'  loading='lazy' />
       <div class='info'>
-
+      
         <p class='info-item'>
           <b>Likes: </b><br>
-          ${card.likes}
+          ${likes}
         </p>
 
         <p class='info-item'>
           <b>Views: </b><br>
-          ${card.views}
+          ${views}
         </p>
 
         <p class='info-item'>
           <b>Comments: </b><br>
-          ${card.comments}
+          ${comments}
         </p>
 
         <p class='info-item'>
         <b>Downloads: </b><br>
-        ${card.downloads}
+        ${downloads}
         </p>
       </div>
+      
     </div>
+    </a>
   `;
 }
-
+//Очистка контейнера
 function clearCardsConteiner() {
   cardsConteinerRef.innerHTML = '';
 }
