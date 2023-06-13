@@ -91,7 +91,7 @@ async function onLoadMore(e) {
     const result = await apiService.fetchInPixabay(apiService.query);
 
     const totalPages = Math.ceil(result.totalHits / apiService.perPage);
-    if (apiService.page + 1 === totalPages) {
+    if (apiService.page - 1 === totalPages) {
       apiService.perPage =
         result.totalHits % apiService.perPage || apiService.perPage;
       lastPageCheck();
