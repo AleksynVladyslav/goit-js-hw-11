@@ -74,11 +74,10 @@ async function onSubmit(e) {
     }
 
     clearCardsConteiner();
+    result.hits.map(card => appendCardsMarkup(card)).join('');
     if (result.totalHits < apiService.perPage) {
       return lastPageCheck();
     }
-
-    result.hits.map(card => appendCardsMarkup(card)).join('');
 
     displayLoadMore.visibly();
   } catch (error) {
