@@ -97,7 +97,6 @@ async function onLoadMore(e) {
     if (apiService.page === totalPages) {
       apiService.perPage = result.totalHits % 40;
       lastPageCheck();
-      ъ;
       return;
     }
   } catch (error) {
