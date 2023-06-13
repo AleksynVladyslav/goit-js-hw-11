@@ -74,10 +74,11 @@ async function onSubmit(e) {
     }
 
     clearCardsConteiner();
-    result.hits.map(card => appendCardsMarkup(card)).join('');
     if (result.totalHits < apiService.perPage) {
       return lastPageCheck();
     }
+
+    result.hits.map(card => appendCardsMarkup(card)).join('');
 
     displayLoadMore.visibly();
   } catch (error) {
@@ -91,13 +92,11 @@ async function onLoadMore(e) {
     const result = await apiService.fetchInPixabay(apiService.query);
 
     const totalPages = Math.ceil(result.totalHits / 40);
-
-    result.hits.map(card => appendCardsMarkup(card)).join('');
-
     if (apiService.page === totalPages) {
       apiService.perPage = result.totalHits % 40 || 40;
       lastPageCheck();
     }
+    result.hits.map(card => appendCardsMarkup(card)).join('');
   } catch (error) {
     console.log(error);
   }
