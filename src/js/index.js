@@ -97,7 +97,9 @@ async function onLoadMore(e) {
       lastPageCheck();
     }
 
-    result.hits.map(card => appendCardsMarkup(card)).join('');
+    for (let i = 0; i < result.hits.length; i += 1) {
+      appendCardsMarkup(result.hits[i]);
+    }
   } catch (error) {
     console.log(error);
   }
