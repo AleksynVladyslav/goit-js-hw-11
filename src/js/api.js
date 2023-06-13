@@ -17,7 +17,7 @@ export default class ApiService {
       );
 
       const data = response.data;
-      this.incrementPage();
+      // this.incrementPage();
 
       return data;
     } catch (error) {
