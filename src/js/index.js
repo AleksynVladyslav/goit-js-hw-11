@@ -95,9 +95,8 @@ async function onLoadMore(e) {
     result.hits.map(card => appendCardsMarkup(card)).join('');
 
     if (apiService.page === totalPages) {
-      apiService.perPage = result.totalHits % 40;
+      apiService.perPage = result.totalHits % 40 || 40;
       lastPageCheck();
-      return;
     }
   } catch (error) {
     console.log(error);
