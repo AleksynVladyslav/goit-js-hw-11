@@ -48,6 +48,7 @@ function onInputValidation(e) {
   const searchValue = e.currentTarget.elements.searchQuery.value;
   const newValue = searchValue.trim();
   displayLoadMore.invisibly();
+  clearCardsConteiner();
   if (newValue) {
     submitState.enabled();
   }
@@ -90,12 +91,11 @@ async function onLoadMore(e) {
     const result = await apiService.fetchInPixabay(apiService.query);
 
     const totalPages = Math.ceil(result.totalHits / apiService.perPage);
-    if (apiService.page >= totalPages) {
-      return lastPageCheck();
-    }
 
     result.hits.map(card => appendCardsMarkup(card)).join('');
-    apiService.incrementPage();
+    if (apiService.page === totalPages) {
+      return lastPageCheck();
+    }
   } catch (error) {
     console.log(error);
   }
