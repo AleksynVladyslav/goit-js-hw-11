@@ -90,10 +90,12 @@ async function onLoadMore(e) {
   try {
     const result = await apiService.fetchInPixabay(apiService.query);
 
-    const totalPages = Math.ceil(result.totalHits / 40);
-    if (apiService.page === totalPages) {
-      apiService.perPage = result.totalHits % 40 || 40;
+    const totalPages = Math.ceil(result.totalHits / apiService.perPage);
+    if (apiService.page === totalPages - 1) {
+      apiService.perPage =
+        result.totalHits % apiService.perPage || apiService.perPage;
       lastPageCheck();
+      return;
     }
     result.hits.map(card => appendCardsMarkup(card)).join('');
   } catch (error) {
