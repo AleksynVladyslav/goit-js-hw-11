@@ -96,16 +96,13 @@ async function onLoadMore(e) {
 
     const totalPages = Math.ceil(result.totalHits / apiService.perPage);
     const currentPage = apiService.page;
-    const remainingItems =
-      result.totalHits % apiService.perPage || apiService.perPage;
 
     if (currentPage === totalPages) {
-      if (remainingItems < apiService.perPage) {
-        apiService.perPage = remainingItems;
-      }
       lastPageCheck();
       return;
     }
+
+    apiService.incrementPage();
   } catch (error) {
     console.log(error);
   }
