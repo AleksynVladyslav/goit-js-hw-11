@@ -94,9 +94,13 @@ async function onLoadMore(e) {
       appendCardsMarkup(result.hits[i]);
     }
 
-    const totalLoaded =
-      (apiService.page - 1) * apiService.perPage + result.hits.length;
-    if (totalLoaded >= result.totalHits) {
+    const totalPages = Math.ceil(result.totalHits / apiService.perPage);
+    const currentPage = apiService.page;
+    const remainingItems =
+      result.totalHits % apiService.perPage || apiService.perPage;
+
+    if (currentPage === totalPages && remainingItems < apiService.perPage) {
+      apiService.perPage = remainingItems;
       lastPageCheck();
       return;
     }
@@ -105,7 +109,6 @@ async function onLoadMore(e) {
   }
   lightbox.refresh();
 }
-
 //Действие на последнюю страницу
 function lastPageCheck() {
   displayLoadMore.invisibly();
