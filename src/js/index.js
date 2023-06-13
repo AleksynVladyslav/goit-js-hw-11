@@ -99,8 +99,10 @@ async function onLoadMore(e) {
     const remainingItems =
       result.totalHits % apiService.perPage || apiService.perPage;
 
-    if (currentPage === totalPages && remainingItems < apiService.perPage) {
-      apiService.perPage = remainingItems;
+    if (currentPage === totalPages) {
+      if (remainingItems < apiService.perPage) {
+        apiService.perPage = remainingItems;
+      }
       lastPageCheck();
       return;
     }
@@ -109,6 +111,7 @@ async function onLoadMore(e) {
   }
   lightbox.refresh();
 }
+
 //Действие на последнюю страницу
 function lastPageCheck() {
   displayLoadMore.invisibly();
