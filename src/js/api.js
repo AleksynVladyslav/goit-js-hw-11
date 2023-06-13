@@ -11,7 +11,7 @@ class ApiService {
     this.perPage = 40;
   }
 
-  async fetchInPixabay() {
+  async fetchInPixabay(query) {
     try {
       const response = await axios.get(
         `${URL}${BASE_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}&page=${this.page}`
