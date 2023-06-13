@@ -2,7 +2,7 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-import { ApiService } from './api.js';
+import ApiService from './api.js';
 
 const refs = {
   searchFormRef: document.querySelector('#search-form'),
