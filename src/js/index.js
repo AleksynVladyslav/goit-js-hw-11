@@ -100,13 +100,15 @@ async function onLoadMore(e) {
     for (let i = 0; i < result.hits.length; i++) {
       appendCardsMarkup(result.hits[i]);
     }
+
+    apiService.incrementPage();
   } catch (error) {
     console.log(error);
   }
   lightbox.refresh();
 }
 
-//Проверка на последнюю страницу
+//Действие на последнюю страницу
 function lastPageCheck() {
   displayLoadMore.invisibly();
   Notiflix.Notify.failure(
