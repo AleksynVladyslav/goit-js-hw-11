@@ -92,16 +92,14 @@ async function onLoadMore(e) {
 
     const totalPages = Math.ceil(result.totalHits / apiService.perPage);
     if (apiService.page === totalPages) {
-      apiService.perPage =
-        result.totalHits % apiService.perPage || apiService.perPage;
+      const remainder = result.totalHits % apiService.perPage;
+      apiService.perPage = remainder || apiService.perPage;
       lastPageCheck();
     }
 
     for (let i = 0; i < result.hits.length; i++) {
       appendCardsMarkup(result.hits[i]);
     }
-
-    apiService.incrementPage();
   } catch (error) {
     console.log(error);
   }
