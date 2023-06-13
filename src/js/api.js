@@ -19,6 +19,11 @@ class ApiService {
 
       const data = await response.data;
       this.incrementPage();
+
+      if (data.totalHits < this.perPage) {
+        this.perPage = data.totalHits;
+      }
+
       return data;
     } catch (error) {
       console.log(error);
