@@ -90,11 +90,17 @@ async function onLoadMore(e) {
   try {
     const result = await apiService.fetchInPixabay(apiService.query);
 
-    const totalPages = Math.ceil(result.totalHits / apiService.perPage);
-    if (apiService.page === totalPages) {
-      const remainder = result.totalHits % apiService.perPage;
-      apiService.perPage = remainder || apiService.perPage;
-      lastPageCheck();
+    // const totalPages = Math.ceil(result.totalHits / apiService.perPage);
+    // if (apiService.page === totalPages) {
+    //   const remainder = result.totalHits % apiService.perPage;
+    //   apiService.perPage = remainder || apiService.perPage;
+    //   lastPageCheck();
+    // }
+    if (
+      result.totalHits <=
+      (apiService.page - 1) * apiService.perPage + result.hits.length
+    ) {
+      return lastPageCheck();
     }
 
     for (let i = 0; i < result.hits.length; i++) {
