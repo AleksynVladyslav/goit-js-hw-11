@@ -47,7 +47,6 @@ searchFormRef.addEventListener('input', onInputValidation);
 function onInputValidation(e) {
   const searchValue = e.currentTarget.elements.searchQuery.value;
   const newValue = searchValue.trim();
-  clearCardsConteiner();
   displayLoadMore.invisibly();
   if (newValue) {
     submitState.enabled();
@@ -76,9 +75,9 @@ async function onSubmit(e) {
     clearCardsConteiner();
     result.hits.map(card => appendCardsMarkup(card)).join('');
     if (result.totalHits < apiService.perPage) {
-      lastPageCheck();
-      return;
+      return lastPageCheck();
     }
+
     displayLoadMore.visibly();
   } catch (error) {
     console.log(error);
@@ -89,14 +88,14 @@ async function onSubmit(e) {
 async function onLoadMore(e) {
   try {
     const result = await apiService.fetchInPixabay(apiService.query);
-    result.hits.map(card => appendCardsMarkup(card)).join('');
 
-    const totalPages = Math.round(result.totalHits / apiService.perPage);
-    if (totalPages === apiService.page) {
-      lastPageCheck();
-
-      return;
+    const totalPages = Math.ceil(result.totalHits / apiService.perPage);
+    if (apiService.page >= totalPages) {
+      return lastPageCheck();
     }
+
+    result.hits.map(card => appendCardsMarkup(card)).join('');
+    apiService.incrementPage();
   } catch (error) {
     console.log(error);
   }
