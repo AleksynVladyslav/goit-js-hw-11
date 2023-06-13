@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-export { ApiService };
 const BASE_KEY = 'key=29399039-4460efa4eda80960e71e08ca2';
 const URL = 'https://pixabay.com/api/?';
 
-class ApiService {
+export default class ApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
@@ -14,21 +13,22 @@ class ApiService {
   async fetchInPixabay(query) {
     try {
       const response = await axios.get(
-        `${URL}${BASE_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}&page=${this.page}`
+        `${URL}${BASE_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}&page=${this.page}`
       );
 
-      const data = await response.data;
+      const data = response.data;
       this.incrementPage();
 
       return data;
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   }
 
   incrementPage() {
     this.page += 1;
   }
+
   resetPage() {
     this.page = 1;
   }
