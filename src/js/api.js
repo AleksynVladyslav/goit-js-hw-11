@@ -20,8 +20,9 @@ class ApiService {
       const data = await response.data;
       this.incrementPage();
 
-      if (data.totalHits < this.perPage) {
-        this.perPage = data.totalHits;
+      const dt = data.totalHits % this.perPage;
+      if (dt != 0) {
+        this.perPage = dt;
       }
 
       return data;
